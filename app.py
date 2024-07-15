@@ -12,8 +12,8 @@ def load_model():
     return model
 
 def generate_music_tensors(description, duration: int):
-    print("Description: ", description)
-    print("Duration: ", duration)
+    st.write("Generating music for description: ", description)
+    st.write("Duration: ", duration)
     model = load_model()
 
     model.set_generation_params(
@@ -30,20 +30,15 @@ def generate_music_tensors(description, duration: int):
 
     return output[0]
 
-
-def save_audio(samples: torch.Tensor):
+def save_audio(samples: torch.Tensor, sample_rate: int = 32000, save_path: str = "audio_output/"):
     """Renders an audio player for the given audio samples and saves them to a local directory.
 
     Args:
         samples (torch.Tensor): a Tensor of decoded audio samples
             with shapes [B, C, T] or [C, T]
-        sample_rate (int): sample rate audio should be displayed with.
-        save_path (str): path to the directory where audio should be saved.
     """
-
-    print("Samples (inside function): ", samples)
-    sample_rate = 32000
-    save_path = "audio_output/"
+    st.write("Saving audio samples")
+    os.makedirs(save_path, exist_ok=True)
     assert samples.dim() == 2 or samples.dim() == 3
 
     samples = samples.detach().cpu()
@@ -52,7 +47,7 @@ def save_audio(samples: torch.Tensor):
 
     for idx, audio in enumerate(samples):
         audio_path = os.path.join(save_path, f"audio_{idx}.wav")
-        torchaudio.save(audio_path, audio, sample_rate)
+        torchaudio.save(audio_path, audio, sample_rate, backend='sox_io')
 
 def get_binary_file_downloader_html(bin_file, file_label='File'):
     with open(bin_file, 'rb') as f:
@@ -62,12 +57,11 @@ def get_binary_file_downloader_html(bin_file, file_label='File'):
     return href
 
 st.set_page_config(
-    page_icon= "musical_note",
-    page_title= "Music Gen"
+    page_icon="musical_note",
+    page_title="Music Gen"
 )
 
 def main():
-
     st.title("Text to Music Generator🎵")
 
     with st.expander("See explanation"):
@@ -84,14 +78,12 @@ def main():
 
         st.subheader("Generated Music")
         music_tensors = generate_music_tensors(text_area, time_slider)
-        print("Musci Tensors: ", music_tensors)
-        save_music_file = save_audio(music_tensors)
+        save_audio(music_tensors)
         audio_filepath = 'audio_output/audio_0.wav'
         audio_file = open(audio_filepath, 'rb')
         audio_bytes = audio_file.read()
         st.audio(audio_bytes)
         st.markdown(get_binary_file_downloader_html(audio_filepath, 'Audio'), unsafe_allow_html=True)
-
 
 if __name__ == "__main__":
     main()
