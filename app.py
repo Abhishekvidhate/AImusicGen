@@ -1,4 +1,4 @@
-from audiocraft.models import MusicGen
+from audiocraft.audiocraft.models import MusicGen
 import streamlit as st
 import torch
 import torchaudio
