@@ -2,7 +2,7 @@
 
 Welcome to AImusicGen, a project utilizing Meta's [AudioCraft](https://ai.meta.com/resources/models-and-libraries/audiocraft/) for music generation. This repository contains the code and models used for training and generating music.
 
-![AudioCraft](https://ai.meta.com/resources/models-and-libraries/audiocraft/images/audiocraft.png)
+![image](https://github.com/user-attachments/assets/0b2b7be1-e123-4bcf-afbd-1d01a70ce4b5)
 
 
 ## Introduction
