@@ -1,4 +1,4 @@
-from audiocraft.models import MusicGen
+from audiocraft.audiocraft.models import MusicGen
 import streamlit as st
 import torch
 import torchaudio
@@ -20,7 +20,7 @@ def generate_music(description, duration, model_name):
 
     model.set_generation_params(
         use_sampling=True,
-        top_k=5,
+        top_k=1,
         duration=duration
     )
 
